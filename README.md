@@ -5,4 +5,4 @@ LazyScrollView 继承自ScrollView，目标是解决异构（与TableView的同�
 
 个人实现，细节还有待完善......
 
-![image](https://github.com/chenjunpu/TwitterLaunchScreenAnimation/blob/master/h.gif)
+![image](https://github.com/chenjunpu/LazyScrollView/blob/master/Preview.gif)
