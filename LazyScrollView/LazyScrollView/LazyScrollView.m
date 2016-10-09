@@ -52,11 +52,57 @@ NS_ASSUME_NONNULL_END
 
 - (void)reloadData {
     
+    [self.subviews makeObjectsPerformSelector:@selector(removeFromSuperview)];
     [self.visibleViews removeAllObjects];
     
     [self allModelCount];
     
-    // TODO ..................
+    // TODO (还有待改善）
+    
+    NSMutableArray *newVisibleModels = [self visibleRectModelInScreen];
+    
+    // 获取当前屏幕需要显示的RectModel的LazyID组成数组
+    NSMutableArray *newVisibleLazyIDs = [newVisibleModels valueForKey:@"lazyID"];
+    
+    // 拿当前显示的View的lazyID和需要显示的view的Model的lazyID做对比，可以知道当前显示的View哪些应该被回收
+    NSMutableArray *toRemove = [NSMutableArray array];
+    
+    for (UIView *view in self.visibleViews) {
+        
+        if (![newVisibleLazyIDs containsObject:view.lazyID]) {
+            [toRemove addObject:view];
+        }
+    }
+    
+    for (UIView *view in toRemove) {
+        
+        [self.visibleViews removeObject:view];
+        
+        [self enqueueReusableView:view];
+        
+        view.hidden = YES;
+    }
+    
+    // 获取屏幕上已经添加并显示的view的lazyID组成数组和需要显示的view的Model的lazyID做对比，可以知道哪些应该添加
+    NSMutableArray *alreadyVisibles = [self.visibleViews valueForKey:@"lazyID"];
+    
+    for (RectModel *model in newVisibleModels) {
+        
+        // 已经添加就不需要再添加
+        if ([alreadyVisibles containsObject:model.lazyID]) {
+            continue;
+        }
+        
+        UIView *view = [self.dataSource scrollView:self itemByLazyID:model.lazyID];
+        
+        view.frame = model.absRect;
+        
+        view.lazyID = model.lazyID;
+        
+        [self.visibleViews addObject:view];
+        
+        [self addSubview:view];
+    }
 }
 
 - (void)registerClass:(Class)viewClass forViewReuseIdentifier:(NSString *)identifier {
@@ -181,52 +227,6 @@ NS_ASSUME_NONNULL_END
  @return 需要显示的RectModel数组
  */
 - (NSMutableArray<RectModel *> *)visibleRectModelInScreen {
-    
-//    // 根据顶边(y)升序排序
-//    NSMutableArray *ascendY = [NSMutableArray arrayWithArray:self.allModels];
-//
-//    [ascendY sortUsingComparator:^NSComparisonResult(RectModel *obj1, RectModel *obj2) {
-//
-//        return obj1.absRect.origin.y > obj2.absRect.origin.y ? NSOrderedDescending : NSOrderedAscending;
-//        
-//    }];
-//    
-//    // 根据底边(y+height)降序排序
-//    NSMutableArray *dscendYHeight = [NSMutableArray arrayWithArray:self.allModels];
-//
-//    [dscendYHeight sortUsingComparator:^NSComparisonResult(RectModel *obj1, RectModel *obj2) {
-//        
-//        return obj1.absRect.origin.y + obj1.absRect.size.height > obj2.absRect.origin.y + obj2.absRect.size.height ? NSOrderedAscending : NSOrderedDescending;
-//
-//    }];
-    
-//    NSNumber *top = [NSNumber numberWithFloat: LAZY_TOP - BUFFER];
-//    NSNumber *bottom = [NSNumber numberWithFloat: LAZY_BOTTOM + BUFFER];
-//    
-//    NSArray *array1;
-//    
-//    for (int i = 0; i < dscendYHeight.count; ++i) {
-//        
-//        RectModel *model = dscendYHeight[i];
-//        
-//        if ((model.absRect.origin.y) < [bottom floatValue]) {
-//                array1 = [dscendYHeight subarrayWithRange:NSMakeRange(i, dscendYHeight.count - i)];
-//            break;
-//
-//        }
-//    }
-//    
-//    NSArray *array2;
-//    for (int i = 0; i < ascendY.count; ++i) {
-//        RectModel *model = ascendY[i];
-//
-//        if (model.absRect.origin.y + model.absRect.size.height > [top floatValue]) {
-//                array2 = [ascendY subarrayWithRange:NSMakeRange(i, ascendY.count - i)];
-//
-//            break;
-//        }
-//    }
-    
     
     NSMutableSet *ascendSet = [self ascendYAndFindGreaterThanTop];
     
