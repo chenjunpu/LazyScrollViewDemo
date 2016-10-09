@@ -4,3 +4,5 @@
 LazyScrollView 继承自ScrollView，目标是解决异构（与TableView的同构对比）滚动视图的复用回收问题。它可以支持跨View层的复用，用易用方式来生成一个高性能的滚动视图。
 
 个人实现，细节还有待完善......
+
+![image](https://github.com/chenjunpu/TwitterLaunchScreenAnimation/blob/master/h.gif)
