@@ -3,7 +3,7 @@
 //  LazyScrollView
 //
 //  Created by chenjunpu on 2016/10/1.
-//  Copyright © 2016年 chenjunpu. All rights reserved.
+//  Copyright © 2016年 Tmall. All rights reserved.
 //
 
 #import "RectModel.h"
