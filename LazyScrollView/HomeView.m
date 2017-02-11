@@ -12,7 +12,7 @@
 
 @interface HomeView ()
 
-@property (null_resettable, nonatomic) UILabel *title;
+@property (nonatomic) UILabel *title;
 
 @end
 
@@ -27,7 +27,7 @@
     return self;
 }
 
-#pragma mark - ***** UI *****
+#pragma mark - set up UI 
 
 - (void)setupUI {
     

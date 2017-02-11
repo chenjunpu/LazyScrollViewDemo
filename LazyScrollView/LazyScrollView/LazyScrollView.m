@@ -21,11 +21,11 @@ NS_ASSUME_NONNULL_BEGIN
 /// 重用池
 @property (nullable, nonatomic) NSMutableDictionary<NSString *, NSMutableArray *> *reuserDict;
 /// 所有的View的RectModel
-@property (nullable, nonatomic) NSMutableArray<__kindof RectModel *> *allModels;
+@property (nullable, nonatomic) NSMutableArray<RectModel *> *allModels;
 /// 注册的View的Classes类型
 @property (nullable, nonatomic) NSMutableDictionary<NSString *, Class> *registerClasses;
 /// 当前屏幕已经显示的Views
-@property (nullable, nonatomic) NSMutableArray<__kindof UIView *> *visibleViews;
+@property (nullable, nonatomic) NSMutableArray<UIView *> *visibleViews;
 
 @end
 
@@ -238,7 +238,7 @@ NS_ASSUME_NONNULL_END
 
 
     
-//  尝试二分查找
+//  曾尝试二分查找
 //    NSRange searchRange = NSMakeRange(0, [ascendY count]);
 //    NSUInteger findIndex = [ascendY indexOfObject:bottom
 //                                    inSortedRange:searchRange
